@@ -1,42 +1,30 @@
-import { addRule, removeRule, updateRule } from '@/services/ant-design-pro/api';
-import { queryByPageUsingPost } from '@/services/my-api-backend/interfaceInfoController';
+/*
+ * @Author: Christer hongweibin3@gmail.com
+ * @Date: 2024-01-28 17:56:26
+ * @LastEditors: Christer hongweibin3@gmail.com
+ * @LastEditTime: 2024-02-01 22:26:37
+ * @FilePath: \my-api-frontend\src\pages\InterfaceInfo\index.tsx
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
+import { removeRule, updateRule } from '@/services/ant-design-pro/api';
+import {
+  addInterFaceInfoUsingPost,
+  queryByPageUsingPost,
+} from '@/services/my-api-backend/interfaceInfoController';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components';
 import {
   FooterToolbar,
-  ModalForm,
   PageContainer,
   ProDescriptions,
-  ProFormText,
-  ProFormTextArea,
   ProTable,
 } from '@ant-design/pro-components';
 import '@umijs/max';
 import { Button, Drawer, message } from 'antd';
 import React, { useRef, useState } from 'react';
+import CreateModal from './components/CreateModal';
 import type { FormValueType } from './components/UpdateForm';
 import UpdateForm from './components/UpdateForm';
-
-/**
- * @en-US Add node
- * @zh-CN 添加节点
- * @param fields
- */
-const handleAdd = async (fields: API.RuleListItem) => {
-  const hide = message.loading('正在添加');
-  try {
-    await addRule({
-      ...fields,
-    });
-    hide();
-    message.success('Added successfully');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('Adding failed, please try again!');
-    return false;
-  }
-};
 
 /**
  * @en-US Update node
@@ -101,6 +89,29 @@ const TableList: React.FC = () => {
   const [selectedRowsState, setSelectedRows] = useState<API.RuleListItem[]>([]);
 
   /**
+   * @en-US Add node
+   * @zh-CN 添加节点
+   * @param fields
+   */
+  const handleAdd = async (params: API.InterfaceInfoParam) => {
+    const hide = message.loading('正在添加');
+    try {
+      await addInterFaceInfoUsingPost({
+        ...params,
+      });
+      hide();
+      message.success('创建成功！');
+      // 创建成功就关闭这个模态框
+      handleModalOpen(false);
+      return true;
+    } catch (error: any) {
+      hide();
+      message.error('创建失败' + error.message);
+      return false;
+    }
+  };
+
+  /**
    * @en-US International configuration
    * @zh-CN 国际化配置
    * */
@@ -115,6 +126,13 @@ const TableList: React.FC = () => {
       title: '接口名称',
       dataIndex: 'name',
       valueType: 'text',
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+          },
+        ],
+      },
     },
     {
       title: '描述',
@@ -124,6 +142,11 @@ const TableList: React.FC = () => {
     {
       title: '接口地址',
       dataIndex: 'url',
+      valueType: 'text',
+    },
+    {
+      title: '请求类型',
+      dataIndex: 'method',
       valueType: 'text',
     },
     {
@@ -142,19 +165,16 @@ const TableList: React.FC = () => {
       valueType: 'textarea',
     },
     {
-      title: '请求类型',
-      dataIndex: 'method',
-      valueType: 'textarea',
-    },
-    {
       title: '创建时间',
       dataIndex: 'createTime',
       valueType: 'dateTime',
+      hideInForm: true,
     },
     {
       title: '更新时间',
       dataIndex: 'updateTime',
       valueType: 'dateTime',
+      hideInForm: true,
     },
     {
       title: '接口状态',
@@ -183,10 +203,7 @@ const TableList: React.FC = () => {
             setCurrentRow(record);
           }}
         >
-          配置
-        </a>,
-        <a key="subscribeAlert" href="https://procomponents.ant.design/">
-          订阅警报
+          修改
         </a>,
       ],
     },
@@ -218,7 +235,7 @@ const TableList: React.FC = () => {
             keyword?: string;
           },
         ) => {
-          const res = await queryByPageUsingPost({
+          const res: any = await queryByPageUsingPost({
             ...params,
           });
           if (res?.data) {
@@ -226,6 +243,12 @@ const TableList: React.FC = () => {
               data: res?.data.records || [],
               success: true,
               total: res?.data.total || 0,
+            };
+          } else {
+            return {
+              data: [],
+              success: false,
+              total: 0,
             };
           }
         }}
@@ -267,33 +290,7 @@ const TableList: React.FC = () => {
           <Button type="primary">批量审批</Button>
         </FooterToolbar>
       )}
-      <ModalForm
-        title={'新建规则'}
-        width="400px"
-        open={createModalOpen}
-        onOpenChange={handleModalOpen}
-        onFinish={async (value) => {
-          const success = await handleAdd(value as API.RuleListItem);
-          if (success) {
-            handleModalOpen(false);
-            if (actionRef.current) {
-              actionRef.current.reload();
-            }
-          }
-        }}
-      >
-        <ProFormText
-          rules={[
-            {
-              required: true,
-              message: '规则名称为必填项',
-            },
-          ]}
-          width="md"
-          name="name"
-        />
-        <ProFormTextArea width="md" name="desc" />
-      </ModalForm>
+
       <UpdateForm
         onSubmit={async (value) => {
           const success = await handleUpdate(value);
@@ -338,6 +335,17 @@ const TableList: React.FC = () => {
           />
         )}
       </Drawer>
+      <CreateModal
+        columns={columns}
+        onCancel={() => {
+          handleModalOpen(false);
+        }}
+        // 当用户点击提交按钮之后，调用handleAdd函数处理提交的数据，去请求后端添加数据(这里的报错不用管,可能里面组件的属性和外层的不一致)
+        onSubmit={(values) => {
+          handleAdd(values);
+        }}
+        visible={createModalOpen}
+      />
     </PageContainer>
   );
 };
