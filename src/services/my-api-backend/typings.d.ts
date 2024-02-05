@@ -42,7 +42,7 @@ declare namespace API {
 
   type deleteByIdUsingDELETEParams = {
     /** id */
-    id: string;
+    id?: number;
   };
 
   type InterfaceInfo = {
@@ -50,7 +50,7 @@ declare namespace API {
     createUserId?: string;
     deletedFlag?: number;
     description?: string;
-    id?: string;
+    id?: number;
     method?: string;
     name?: string;
     requestHeader?: string;
@@ -65,7 +65,7 @@ declare namespace API {
   type InterfaceInfoParam = {
     createUserId?: string;
     description: string;
-    id: string;
+    id?: number;
     method: string;
     name: string;
     requestHeader: string;

@@ -2,13 +2,14 @@
  * @Author: Christer hongweibin3@gmail.com
  * @Date: 2024-01-28 17:56:26
  * @LastEditors: Christer hongweibin3@gmail.com
- * @LastEditTime: 2024-02-01 22:26:37
+ * @LastEditTime: 2024-02-05 17:25:57
  * @FilePath: \my-api-frontend\src\pages\InterfaceInfo\index.tsx
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE<
  */
-import { removeRule, updateRule } from '@/services/ant-design-pro/api';
 import {
   addInterFaceInfoUsingPost,
+  deleteByIdUsingDelete,
+  editInterFaceInfoUsingPut,
   queryByPageUsingPost,
 } from '@/services/my-api-backend/interfaceInfoController';
 import { PlusOutlined } from '@ant-design/icons';
@@ -23,55 +24,9 @@ import '@umijs/max';
 import { Button, Drawer, message } from 'antd';
 import React, { useRef, useState } from 'react';
 import CreateModal from './components/CreateModal';
-import type { FormValueType } from './components/UpdateForm';
-import UpdateForm from './components/UpdateForm';
+import UpdateModal from './components/UpdateModal';
+import DeleteModal from './components/DeleteModal';
 
-/**
- * @en-US Update node
- * @zh-CN 更新节点
- *
- * @param fields
- */
-const handleUpdate = async (fields: FormValueType) => {
-  const hide = message.loading('Configuring');
-  try {
-    await updateRule({
-      name: fields.name,
-      desc: fields.desc,
-      key: fields.key,
-    });
-    hide();
-    message.success('Configuration is successful');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('Configuration failed, please try again!');
-    return false;
-  }
-};
-
-/**
- *  Delete node
- * @zh-CN 删除节点
- *
- * @param selectedRows
- */
-const handleRemove = async (selectedRows: API.RuleListItem[]) => {
-  const hide = message.loading('正在删除');
-  if (!selectedRows) return true;
-  try {
-    await removeRule({
-      key: selectedRows.map((row) => row.key),
-    });
-    hide();
-    message.success('Deleted successfully and will refresh soon');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('Delete failed, please try again');
-    return false;
-  }
-};
 const TableList: React.FC = () => {
   /**
    * @en-US Pop-up window of new window
@@ -83,10 +38,11 @@ const TableList: React.FC = () => {
    * @zh-CN 分布更新窗口的弹窗
    * */
   const [updateModalOpen, handleUpdateModalOpen] = useState<boolean>(false);
+  const [deleteModalOpen, handleDeleteModalOpen] = useState<boolean>(false);
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
-  const [selectedRowsState, setSelectedRows] = useState<API.RuleListItem[]>([]);
+  const [currentRow, setCurrentRow] = useState<API.InterfaceInfo>();
+  const [selectedRowsState, setSelectedRows] = useState<API.InterfaceInfo[]>([]);
 
   /**
    * @en-US Add node
@@ -107,6 +63,57 @@ const TableList: React.FC = () => {
     } catch (error: any) {
       hide();
       message.error('创建失败' + error.message);
+      return false;
+    }
+  };
+
+  /**
+   * @en-US Update node
+   * @zh-CN 更新节点
+   *
+   * @param fields
+   */
+  const handleUpdate = async (fields: API.InterfaceInfoParam) => {
+    if (!currentRow) {
+      return;
+    }
+    const hide = message.loading('修改中...');
+    try {
+      await editInterFaceInfoUsingPut({
+        id: currentRow.id,
+        ...fields,
+      });
+      hide();
+      message.success('操作成功！');
+      return true;
+    } catch (error: any) {
+      hide();
+      message.error('操作失败:' + error.message);
+      return false;
+    }
+  };
+
+  /**
+   *  Delete node
+   * @zh-CN 删除节点
+   *
+   * @param selectedRows
+   */
+  const handleRemove = async (selectedRows: API.InterfaceInfo) => {
+    const hide = message.loading('正在删除');
+    if (!selectedRows) return true;
+    try {
+      await deleteByIdUsingDelete({
+        id: selectedRows.id,
+      });
+      hide();
+      message.success('删除成功');
+      // 删除成功，自动刷新表单
+      actionRef.current?.reload();
+      return true;
+    } catch (error: any) {
+      hide();
+      message.error('删除失败' + error.message);
       return false;
     }
   };
@@ -205,6 +212,15 @@ const TableList: React.FC = () => {
         >
           修改
         </a>,
+        <a
+          key="deleteKey"
+          onClick={() => {
+            handleDeleteModalOpen(true);
+            setCurrentRow(record);
+          }}
+        >
+          删除
+        </a>,
       ],
     },
   ];
@@ -291,7 +307,9 @@ const TableList: React.FC = () => {
         </FooterToolbar>
       )}
 
-      <UpdateForm
+      <UpdateModal
+        // 要传递columns 不然修改模态框没有表单项
+        columns={columns}
         onSubmit={async (value) => {
           const success = await handleUpdate(value);
           if (success) {
@@ -308,10 +326,28 @@ const TableList: React.FC = () => {
             setCurrentRow(undefined);
           }
         }}
-        updateModalOpen={updateModalOpen}
+        // 要传递的表单控制开关，改为visible
+        visible={updateModalOpen}
         values={currentRow || {}}
       />
 
+      <DeleteModal
+      onSubmit={async (value) => {
+        const success = await handleRemove(value);
+        if (success) {
+          handleDeleteModalOpen(false);
+          setCurrentRow(undefined);
+        }
+      }}
+      onCancel={() => {
+        handleDeleteModalOpen(false);
+          if (!showDetail) {
+            setCurrentRow(undefined);
+          }
+      }}
+      visible={deleteModalOpen}
+      values={currentRow || {}}
+      />
       <Drawer
         width={600}
         open={showDetail}
@@ -341,7 +377,7 @@ const TableList: React.FC = () => {
           handleModalOpen(false);
         }}
         // 当用户点击提交按钮之后，调用handleAdd函数处理提交的数据，去请求后端添加数据(这里的报错不用管,可能里面组件的属性和外层的不一致)
-        onSubmit={(values) => {
+        onSubmit={async (values) => {
           handleAdd(values);
         }}
         visible={createModalOpen}
