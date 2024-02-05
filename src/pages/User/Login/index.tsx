@@ -94,10 +94,14 @@ const Login: React.FC = () => {
       const res = await loginUserUsingPost({
         ...values,
       });
+      console.log("登录token 信息", res);
       if (res.code === 200) {
         const urlParams = new URL(window.location.href).searchParams;
-        history.push(urlParams.get('redirect') || '/');
+        setTimeout(() => {
+          history.push(urlParams.get('redirect') || '/');
+        }, 100);
         const data = await getUserInfoUsingGet()
+        console.log("登录用户信息", data);
         if (data.code === 200) {
           setInitialState({loginUser: data.data});
         }
