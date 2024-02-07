@@ -1,4 +1,12 @@
-﻿import type { RequestOptions } from '@@/plugin-request/request';
+﻿/*
+ * @Author: Christer hongweibin3@gmail.com
+ * @Date: 2024-02-07 19:11:34
+ * @LastEditors: Christer hongweibin3@gmail.com
+ * @LastEditTime: 2024-02-07 19:17:42
+ * @FilePath: \my-api-frontend\src\requestConfig.ts
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
+import type { RequestOptions } from '@@/plugin-request/request';
 import type { RequestConfig } from '@umijs/max';
 
 // 错误处理方案： 错误类型
@@ -24,14 +32,13 @@ interface ResponseStructure {
  * @doc https://umijs.org/docs/max/request#配置
  */
 export const requestConfig: RequestConfig = {
-  // 错误处理： umi@3 的错误处理方案。
-
-
+  baseURL: 'http://localhost:8101',
+  withCredentials: true,
   // 请求拦截器
   requestInterceptors: [
     (config: RequestOptions) => {
       // 拦截请求配置，进行个性化处理。
-      const url = config?.url?.concat('?token = 123');
+      const url = config?.url?.concat('');
       return { ...config, url };
     },
   ],

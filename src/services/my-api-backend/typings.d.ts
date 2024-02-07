@@ -101,7 +101,7 @@ declare namespace API {
     records?: InterfaceInfo[];
     searchCount?: boolean;
     size?: string;
-    total?: string;
+    total?: number;
   };
 
   type PageUserInfoVO = {
@@ -123,7 +123,7 @@ declare namespace API {
   };
 
   type QueryInterfaceInfoParam = {
-    currentPage: number;
+    current: number;
     description?: string;
     name?: string;
     pageSize: number;

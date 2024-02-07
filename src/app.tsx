@@ -5,6 +5,7 @@ import { SettingDrawer } from '@ant-design/pro-components';
 import type { RunTimeLayoutConfig } from '@umijs/max';
 import { Link, history } from '@umijs/max';
 import { requestConfig } from './requestConfig';
+import { message } from 'antd';
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
 /**
@@ -23,6 +24,7 @@ export async function getInitialState(): Promise<InitialState> {
       state.loginUser = res.data;
     } else {
       console.log('刷新页面，获取用户信息失败：', res);
+      message.error(res.message);
     }
   } catch (error) {
     console.log('刷新页面，获取用户信息失败：', error);
