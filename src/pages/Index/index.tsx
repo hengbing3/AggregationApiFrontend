@@ -2,7 +2,7 @@
  * @Author: Christer hongweibin3@gmail.com
  * @Date: 2024-01-21 15:07:32
  * @LastEditors: Christer hongweibin3@gmail.com
- * @LastEditTime: 2024-02-07 22:44:45
+ * @LastEditTime: 2024-02-07 23:30:10
  * @FilePath: \my-api-frontend\src\pages\Index\index.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -42,14 +42,20 @@ const Index: React.FC = () => {
         loading={loading}
         itemLayout="horizontal"
         dataSource={list}
-        renderItem={(item) => (
-          <List.Item actions={[<a key="list-loadmore-edit">查看</a>]}>
+        renderItem={(item) => {
+          // 构建列表项链接地址
+          const apiLink = `/interface_info/${item.id}`;
+          return (
+            <List.Item actions={[<a key={item.id} href={apiLink}>查看</a>]}>
             <List.Item.Meta
-              title={<a href={'https://ant.design'}>{item.name}</a>}
+            // 列表项标题显示为可点击的链接
+              title={<a href={apiLink}>{item.name}</a>}
+            // 列表项描述
               description={item.description}
             />
-          </List.Item>
-        )}
+            </List.Item>
+          )
+        }}
         // 分页配置
         pagination={{
           showTotal(total: number) {
