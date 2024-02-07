@@ -62,6 +62,36 @@ export async function deleteByIdUsingDelete(
   });
 }
 
+/** 接口发布（上线） PUT /api/interfaceInfo/online */
+export async function onlineInterfaceInfoUsingPut(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.onlineInterfaceInfoUsingPUTParams,
+  options?: { [key: string]: any },
+) {
+  return request<API.CommonResultVoid>('/api/interfaceInfo/online', {
+    method: 'PUT',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+
+/** 接口下线 PUT /api/interfaceInfo/outline */
+export async function outlineInterfaceInfoUsingPut(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.outlineInterfaceInfoUsingPUTParams,
+  options?: { [key: string]: any },
+) {
+  return request<API.CommonResultVoid>('/api/interfaceInfo/outline', {
+    method: 'PUT',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+
 /** 接口信息-分页查询 POST /api/interfaceInfo/page */
 export async function queryByPageUsingPost(
   body: API.QueryInterfaceInfoParam,

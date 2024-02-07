@@ -2,7 +2,7 @@
  * @Author: Christer hongweibin3@gmail.com
  * @Date: 2024-01-28 17:56:26
  * @LastEditors: Christer hongweibin3@gmail.com
- * @LastEditTime: 2024-02-05 17:25:57
+ * @LastEditTime: 2024-02-07 15:48:33
  * @FilePath: \my-api-frontend\src\pages\InterfaceInfo\index.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE<
  */
@@ -10,7 +10,9 @@ import {
   addInterFaceInfoUsingPost,
   deleteByIdUsingDelete,
   editInterFaceInfoUsingPut,
+  onlineInterfaceInfoUsingPut,
   queryByPageUsingPost,
+  outlineInterfaceInfoUsingPut
 } from '@/services/my-api-backend/interfaceInfoController';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components';
@@ -24,8 +26,8 @@ import '@umijs/max';
 import { Button, Drawer, message } from 'antd';
 import React, { useRef, useState } from 'react';
 import CreateModal from './components/CreateModal';
-import UpdateModal from './components/UpdateModal';
 import DeleteModal from './components/DeleteModal';
+import UpdateModal from './components/UpdateModal';
 
 const TableList: React.FC = () => {
   /**
@@ -119,6 +121,56 @@ const TableList: React.FC = () => {
   };
 
   /**
+   *  Delete node
+   * @zh-CN 发布接口
+   *
+   * @param selectedRows
+   */
+  const handleOnline = async (selectedRows: API.onlineInterfaceInfoUsingPUTParams) => {
+    const hide = message.loading('发布中');
+    if (!selectedRows) return true;
+    try {
+      await onlineInterfaceInfoUsingPut({
+        id: selectedRows.id,
+      });
+      hide();
+      message.success('发布成功');
+      // 删除成功，自动刷新表单
+      actionRef.current?.reload();
+      return true;
+    } catch (error: any) {
+      hide();
+      message.error('发布失败' + error.message);
+      return false;
+    }
+  };
+
+   /**
+   *  Delete node
+   * @zh-CN 发布接口
+   *
+   * @param selectedRows
+   */
+   const handleOutline = async (selectedRows: API.outlineInterfaceInfoUsingPUTParams) => {
+    const hide = message.loading('下线中');
+    if (!selectedRows) return true;
+    try {
+      await outlineInterfaceInfoUsingPut({
+        id: selectedRows.id,
+      });
+      hide();
+      message.success('下线成功');
+      // 删除成功，自动刷新表单
+      actionRef.current?.reload();
+      return true;
+    } catch (error: any) {
+      hide();
+      message.error('下线失败' + error.message);
+      return false;
+    }
+  };
+
+  /**
    * @en-US International configuration
    * @zh-CN 国际化配置
    * */
@@ -203,7 +255,8 @@ const TableList: React.FC = () => {
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
-        <a
+        <Button
+          type="text"
           key="config"
           onClick={() => {
             handleUpdateModalOpen(true);
@@ -211,8 +264,31 @@ const TableList: React.FC = () => {
           }}
         >
           修改
-        </a>,
-        <a
+        </Button>,
+        record.status === 0 ? (
+          <Button
+            type="text"
+            key="onlineKey"
+            onClick={() => {
+              handleOnline(record);
+            }}
+          >
+            发布
+          </Button>
+        ) : (
+          <Button
+            type="text"
+            key="outlineKey"
+            onClick={() => {
+              handleOutline(record);
+            }}
+          >
+            下线
+          </Button>
+        ),
+        <Button
+          type="text"
+          danger
           key="deleteKey"
           onClick={() => {
             handleDeleteModalOpen(true);
@@ -220,7 +296,7 @@ const TableList: React.FC = () => {
           }}
         >
           删除
-        </a>,
+        </Button>,
       ],
     },
   ];
@@ -332,21 +408,21 @@ const TableList: React.FC = () => {
       />
 
       <DeleteModal
-      onSubmit={async (value) => {
-        const success = await handleRemove(value);
-        if (success) {
+        onSubmit={async (value) => {
+          const success = await handleRemove(value);
+          if (success) {
+            handleDeleteModalOpen(false);
+            setCurrentRow(undefined);
+          }
+        }}
+        onCancel={() => {
           handleDeleteModalOpen(false);
-          setCurrentRow(undefined);
-        }
-      }}
-      onCancel={() => {
-        handleDeleteModalOpen(false);
           if (!showDetail) {
             setCurrentRow(undefined);
           }
-      }}
-      visible={deleteModalOpen}
-      values={currentRow || {}}
+        }}
+        visible={deleteModalOpen}
+        values={currentRow || {}}
       />
       <Drawer
         width={600}

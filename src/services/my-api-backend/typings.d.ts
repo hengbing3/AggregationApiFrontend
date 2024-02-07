@@ -76,9 +76,19 @@ declare namespace API {
     url: string;
   };
 
+  type onlineInterfaceInfoUsingPUTParams = {
+    /** id */
+    id?: number;
+  };
+
   type OrderItem = {
     asc?: boolean;
     column?: string;
+  };
+
+  type outlineInterfaceInfoUsingPUTParams = {
+    /** id */
+    id?: number;
   };
 
   type PageInterfaceInfo = {
@@ -132,6 +142,7 @@ declare namespace API {
     userAccount?: string;
     userAvatar?: string;
     userName?: string;
+    userPermissionList?: string[];
     userProfile?: string;
     userRole?: string;
   };
@@ -142,7 +153,7 @@ declare namespace API {
   };
 
   type UserQueryParam = {
-    currentPage: number;
+    current: number;
     id?: string;
     mpOpenId?: string;
     pageSize: number;
