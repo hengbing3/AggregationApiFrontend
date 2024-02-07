@@ -7,30 +7,28 @@ import { Link, history } from '@umijs/max';
 import { requestConfig } from './requestConfig';
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
-import { message } from 'antd';
 /**
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
  * */
 export async function getInitialState(): Promise<InitialState> {
   // 当页面首次加载时，获取全局要保存的数据，比如用户信息
   const state: InitialState = {
-    loginUser: undefined
-  }
-  const [messageApi] = message.useMessage();
+    loginUser: undefined,
+  };
 
-    try {
-      const res = await getUserInfoUsingGet();
-      console.log("刷新页面，用户信息：", res)
-      if (res.code === 200) {
-        state.loginUser = res.data;
-      } else  {
-        messageApi.error(res.message);
-      }
-    } catch (error) {
-      console.log("刷新页面，获取用户信息失败：", error)
-      history.push(loginPath);
+  try {
+    const res = await getUserInfoUsingGet();
+    console.log('刷新页面，用户信息：', res);
+    if (res.code === 200) {
+      state.loginUser = res.data;
+    } else {
+      console.log('刷新页面，获取用户信息失败：', res);
     }
-   return state;
+  } catch (error) {
+    console.log('刷新页面，获取用户信息失败：', error);
+    history.push(loginPath);
+  }
+  return state;
 }
 
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
