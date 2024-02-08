@@ -2,7 +2,7 @@
  * @Author: Christer hongweibin3@gmail.com
  * @Date: 2024-01-28 17:56:26
  * @LastEditors: Christer hongweibin3@gmail.com
- * @LastEditTime: 2024-02-07 15:48:33
+ * @LastEditTime: 2024-02-08 14:28:58
  * @FilePath: \my-api-frontend\src\pages\InterfaceInfo\index.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE<
  */
@@ -59,6 +59,7 @@ const TableList: React.FC = () => {
       });
       hide();
       message.success('创建成功！');
+      actionRef.current?.reload();
       // 创建成功就关闭这个模态框
       handleModalOpen(false);
       return true;
@@ -87,6 +88,7 @@ const TableList: React.FC = () => {
       });
       hide();
       message.success('操作成功！');
+      actionRef.current?.reload();
       return true;
     } catch (error: any) {
       hide();
@@ -206,22 +208,42 @@ const TableList: React.FC = () => {
     {
       title: '请求类型',
       dataIndex: 'method',
-      valueType: 'text',
+      valueType: 'select',
+      fieldProps: {
+        options: [
+          {
+            label: 'GET',
+            value: 'GET',
+          },
+          {
+            label: 'POST',
+            value: 'POST',
+          },
+          {
+            label: 'PUT',
+            value: 'PUT',
+          },
+          {
+            label: 'DELETE',
+            value: 'DELETE',
+          },
+        ],
+      },
     },
     {
       title: '请求参数',
       dataIndex: 'requestParams',
-      valueType: 'textarea',
+      valueType: 'jsonCode',
     },
     {
       title: '请求头',
       dataIndex: 'requestHeader',
-      valueType: 'textarea',
+      valueType: 'jsonCode',
     },
     {
       title: '响应头',
       dataIndex: 'responseHeader',
-      valueType: 'textarea',
+      valueType: 'jsonCode',
     },
     {
       title: '创建时间',
@@ -257,7 +279,7 @@ const TableList: React.FC = () => {
       render: (_, record) => [
         <Button
           type="text"
-          key="config"
+          key="updateKey"
           onClick={() => {
             handleUpdateModalOpen(true);
             setCurrentRow(record);
@@ -451,13 +473,19 @@ const TableList: React.FC = () => {
         columns={columns}
         onCancel={() => {
           handleModalOpen(false);
-        }}
+          if (!showDetail) {
+            setCurrentRow(undefined);
+          }
+        } }
         // 当用户点击提交按钮之后，调用handleAdd函数处理提交的数据，去请求后端添加数据(这里的报错不用管,可能里面组件的属性和外层的不一致)
         onSubmit={async (values) => {
-          handleAdd(values);
-        }}
-        visible={createModalOpen}
-      />
+          const flag = await handleAdd(values);
+          if (flag) {
+            handleModalOpen(false);
+            setCurrentRow(undefined);
+          }
+        } }
+        visible={createModalOpen} />
     </PageContainer>
   );
 };
