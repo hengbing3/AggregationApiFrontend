@@ -62,6 +62,21 @@ export async function deleteByIdUsingDelete(
   });
 }
 
+/** 接口调试 POST /api/interfaceInfo/invoke */
+export async function invokeInterfaceInfoUsingPost(
+  body: API.InterfaceInfoInvokeParam,
+  options?: { [key: string]: any },
+) {
+  return request<API.CommonResultobject>('/api/interfaceInfo/invoke', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** 接口发布（上线） PUT /api/interfaceInfo/online */
 export async function onlineInterfaceInfoUsingPut(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)

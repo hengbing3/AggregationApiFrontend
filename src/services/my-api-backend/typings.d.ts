@@ -11,6 +11,12 @@ declare namespace API {
     message?: string;
   };
 
+  type CommonResultobject = {
+    code?: number;
+    data?: Record<string, any>;
+    message?: string;
+  };
+
   type CommonResultPageInterfaceInfo = {
     code?: number;
     data?: PageInterfaceInfo;
@@ -60,6 +66,11 @@ declare namespace API {
     updateTime?: string;
     updateUserId?: string;
     url?: string;
+  };
+
+  type InterfaceInfoInvokeParam = {
+    id: string;
+    userRequestParams?: string;
   };
 
   type InterfaceInfoParam = {
