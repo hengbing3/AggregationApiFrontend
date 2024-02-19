@@ -2,7 +2,7 @@
  * @Author: Christer hongweibin3@gmail.com
  * @Date: 2024-01-28 17:56:26
  * @LastEditors: Christer hongweibin3@gmail.com
- * @LastEditTime: 2024-02-08 14:28:58
+ * @LastEditTime: 2024-02-19 21:27:10
  * @FilePath: \my-api-frontend\src\pages\InterfaceInfo\index.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE<
  */
@@ -234,28 +234,33 @@ const TableList: React.FC = () => {
       title: '请求参数',
       dataIndex: 'requestParams',
       valueType: 'jsonCode',
+      hideInSearch: true,
     },
     {
       title: '请求头',
       dataIndex: 'requestHeader',
       valueType: 'jsonCode',
+      hideInSearch: true,
     },
     {
       title: '响应头',
       dataIndex: 'responseHeader',
       valueType: 'jsonCode',
+      hideInSearch: true,
     },
     {
       title: '创建时间',
       dataIndex: 'createTime',
       valueType: 'dateTime',
       hideInForm: true,
+      hideInSearch: true,
     },
     {
       title: '更新时间',
       dataIndex: 'updateTime',
       valueType: 'dateTime',
       hideInForm: true,
+      hideInSearch: true,
     },
     {
       title: '接口状态',
