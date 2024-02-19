@@ -2,13 +2,13 @@
  * @Author: Christer hongweibin3@gmail.com
  * @Date: 2024-01-21 15:07:32
  * @LastEditors: Christer hongweibin3@gmail.com
- * @LastEditTime: 2024-02-07 23:30:10
+ * @LastEditTime: 2024-02-19 22:30:59
  * @FilePath: \my-api-frontend\src\pages\Index\index.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 import { queryByPageUsingPost } from '@/services/my-api-backend/interfaceInfoController';
 import { PageContainer } from '@ant-design/pro-components';
-import { List, message } from 'antd';
+import { List,  message } from 'antd';
 import React, { useEffect, useState } from 'react';
 
 const Index: React.FC = () => {
@@ -16,7 +16,7 @@ const Index: React.FC = () => {
   const [total, setTotal] = useState<number>(0);
   const [list, setList] = useState<API.InterfaceInfo[]>([]);
 
-  const loadData = async (current = 1, pageSize = 5) => {
+  const loadData = async (current = 1, pageSize = 10) => {
     // 开始加载数据，设置loading为true
     setLoading(true);
     try {
@@ -61,11 +61,16 @@ const Index: React.FC = () => {
           showTotal(total: number) {
             return `共 ${total} 条`;
           },
-          pageSize: 5,
+          defaultPageSize: 10,
+          pageSizeOptions: ['5','10', '20', '30'],
           total,
           onChange(page, pageSize) {
             loadData(page, pageSize);
           },
+          showSizeChanger: true,
+          onShowSizeChange(page, pageSize) {
+            loadData(page, pageSize);
+          }
         }}
       />
     </PageContainer>
