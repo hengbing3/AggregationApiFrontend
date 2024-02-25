@@ -2,7 +2,7 @@
  * @Author: Christer hongweibin3@gmail.com
  * @Date: 2024-02-07 23:07:58
  * @LastEditors: Christer hongweibin3@gmail.com
- * @LastEditTime: 2024-02-08 22:31:32
+ * @LastEditTime: 2024-02-25 16:24:20
  * @FilePath: \my-api-frontend\src\pages\InterfaceInfo\index.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -10,13 +10,11 @@ import {
   invokeInterfaceInfoUsingPost,
   queryByIdUsingGet,
 } from '@/services/my-api-backend/interfaceInfoController';
-import { PageContainer } from '@ant-design/pro-components';
-import { Button, Card, Descriptions, Divider, Form, Input, message } from 'antd';
+import { PageContainer, ProCard, ProForm, ProFormList, ProFormText } from '@ant-design/pro-components';
+import { Card, Descriptions, Divider, Form, Input, Tabs, message } from 'antd';
+import TabPane from 'antd/lib/tabs/TabPane';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-
-
-
 
 /**
  *
@@ -31,14 +29,14 @@ const Index: React.FC = () => {
   const params = useParams();
 
   const loadData = async () => {
-    if(!params.id) {
+    if (!params.id) {
       message.error('接口不存在');
       return;
     }
     setLoading(true);
     try {
-        const res = await queryByIdUsingGet({id: params.id});
-        setData(res.data);
+      const res = await queryByIdUsingGet({ id: params.id });
+      setData(res.data);
     } catch (error: any) {
       message.error('请求失败，' + error.message);
     }
@@ -62,11 +60,11 @@ const Index: React.FC = () => {
     setInvokeLoading(true);
     try {
       // 发起请求调用接口，请求参数包含id和values属性
-     const res = await invokeInterfaceInfoUsingPost({
+      const res = await invokeInterfaceInfoUsingPost({
         id: params.id,
         ...values,
       });
-      if(res.code === 200) {
+      if (res.code === 200) {
         setInvokeRes(res.data);
         message.success('接口请求成功');
         return true;
@@ -79,9 +77,15 @@ const Index: React.FC = () => {
     }
   };
 
+  const [activeTabKey, setActiveTabKey] = useState('1');
+
+  const onTabChange = (key: any) => {
+    setActiveTabKey(key);
+  };
+  const [stateValue, setStateValue] = useState({});
   return (
     <PageContainer title="查看接口文档">
-      <Card>
+      <ProCard>
         {data ? (
           <Descriptions title={data.name} column={1}>
             <Descriptions.Item label="接口状态">{data.status ? '开启' : '关闭'}</Descriptions.Item>
@@ -97,21 +101,33 @@ const Index: React.FC = () => {
         ) : (
           <>接口不存在</>
         )}
-      </Card>
+      </ProCard>
       <Divider />
-      <Card>
-        <Form name="invoke" layout="vertical" onFinish={onFinish}>
-          <Form.Item label="请求参数" name="userRequestParams">
-            <Input.TextArea />
-          </Form.Item>
-          <Form.Item wrapperCol={{ span: 16 }}>
-            {/* 创建调用按钮 */}
-            <Button type="primary" htmlType="submit">
-              调用
-            </Button>
-          </Form.Item>
-        </Form>
-      </Card>
+      <ProCard>
+        <ProForm name="invoke" layout="vertical" onFinish={onFinish}>
+          <Tabs defaultActiveKey="1" onChange={onTabChange} activeKey={activeTabKey}>
+            <TabPane tab="请求参数" key="1">
+              <Form.Item name="userRequestParams">
+                <Input.TextArea />
+              </Form.Item>
+            </TabPane>
+            <TabPane tab="请求头部" key="2">
+              <ProFormList
+                name="headers"
+                creatorButtonProps={{
+                  position: 'bottom',
+                }}
+                {...stateValue}
+              >
+                <ProForm.Group key="group">
+                  <ProFormText name="key" label="参数名称" width={'lg'}/>
+                  <ProFormText name="value" label="参数值" width={'lg'}/>
+                </ProForm.Group>
+              </ProFormList>
+            </TabPane>
+          </Tabs>
+        </ProForm>
+      </ProCard>
       <Divider />
       <Card title="返回结果" loading={invokeLoading}>
         {invokeRes}
