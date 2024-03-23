@@ -62,6 +62,99 @@ export async function deleteByIdUsingDelete(
   });
 }
 
+/** applyInterfaceInfo POST /api/interfaceInfo/apply */
+export async function applyInterfaceInfoUsingPost(
+  body: API.InterfaceInfoApplyParam,
+  options?: { [key: string]: any },
+) {
+  return request<API.CommonResultVoid>('/api/interfaceInfo/apply', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** myInterfaceInfoApplyPage POST /api/interfaceInfo/apply/page */
+export async function myInterfaceInfoApplyPageUsingPost(
+  body: API.MyInterfaceInfoApplyQueryParam,
+  options?: { [key: string]: any },
+) {
+  return request<API.CommonResultPageInterfaceInfoApplyVO>('/api/interfaceInfo/apply/page', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** getDonePage POST /api/interfaceInfo/applyDone */
+export async function getDonePageUsingPost(
+  body: API.InterfaceInfoApplyQueryParam,
+  options?: { [key: string]: any },
+) {
+  return request<API.CommonResultPageInterfaceInfoApply>('/api/interfaceInfo/applyDone', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** getHistoryList GET /api/interfaceInfo/applyHistory */
+export async function getHistoryListUsingGet(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getHistoryListUsingGETParams,
+  options?: { [key: string]: any },
+) {
+  return request<API.CommonResultListInterfaceInfoApplyRecordVO>(
+    '/api/interfaceInfo/applyHistory',
+    {
+      method: 'GET',
+      params: {
+        ...params,
+      },
+      ...(options || {}),
+    },
+  );
+}
+
+/** getTodoPage POST /api/interfaceInfo/applyTodo */
+export async function getTodoPageUsingPost(
+  body: API.InterfaceInfoApplyQueryParam,
+  options?: { [key: string]: any },
+) {
+  return request<API.CommonResultPageInterfaceInfoApply>('/api/interfaceInfo/applyTodo', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** approveInterfaceInfo POST /api/interfaceInfo/approve */
+export async function approveInterfaceInfoUsingPost(
+  body: API.InterfaceInfoApproveParam,
+  options?: { [key: string]: any },
+) {
+  return request<API.CommonResultVoid>('/api/interfaceInfo/approve', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** 接口调试 POST /api/interfaceInfo/invoke */
 export async function invokeInterfaceInfoUsingPost(
   body: API.InterfaceInfoInvokeParam,
@@ -113,6 +206,21 @@ export async function queryByPageUsingPost(
   options?: { [key: string]: any },
 ) {
   return request<API.CommonResultPageInterfaceInfo>('/api/interfaceInfo/page', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** reApplyInterfaceInfo POST /api/interfaceInfo/reapply */
+export async function reApplyInterfaceInfoUsingPost(
+  body: API.InterfaceInfoReApplyParam,
+  options?: { [key: string]: any },
+) {
+  return request<API.CommonResultVoid>('/api/interfaceInfo/reapply', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -1,7 +1,19 @@
 declare namespace API {
+  type ChangePasswordParam = {
+    confirmPassword: string;
+    id: string;
+    userPassword: string;
+  };
+
   type CommonResultInterfaceInfo = {
     code?: number;
     data?: InterfaceInfo;
+    message?: string;
+  };
+
+  type CommonResultListInterfaceInfoApplyRecordVO = {
+    code?: number;
+    data?: InterfaceInfoApplyRecordVO[];
     message?: string;
   };
 
@@ -29,9 +41,27 @@ declare namespace API {
     message?: string;
   };
 
+  type CommonResultPageDepartmentVO = {
+    code?: number;
+    data?: PageDepartmentVO;
+    message?: string;
+  };
+
   type CommonResultPageInterfaceInfo = {
     code?: number;
     data?: PageInterfaceInfo;
+    message?: string;
+  };
+
+  type CommonResultPageInterfaceInfoApply = {
+    code?: number;
+    data?: PageInterfaceInfoApply;
+    message?: string;
+  };
+
+  type CommonResultPageInterfaceInfoApplyVO = {
+    code?: number;
+    data?: PageInterfaceInfoApplyVO;
     message?: string;
   };
 
@@ -80,6 +110,49 @@ declare namespace API {
     id?: number;
   };
 
+  type deleteDepartmentUsingDELETEParams = {
+    /** id */
+    id: string;
+  };
+
+  type DepartmentAddParam = {
+    deptName: string;
+    parentId: string;
+  };
+
+  type DepartmentEditParam = {
+    deptName: string;
+    id: string;
+    parentId: string;
+  };
+
+  type DepartmentPageParam = {
+    current: number;
+    deptName?: string;
+    pageSize: number;
+    start?: number;
+  };
+
+  type DepartmentVO = {
+    createTime?: string;
+    deletedFlag?: boolean;
+    deptName?: string;
+    id?: string;
+    parentDeptName?: string;
+    parentId?: string;
+    updateTime?: string;
+  };
+
+  type getHistoryListUsingGETParams = {
+    /** interfaceInfoApplyId */
+    interfaceInfoApplyId: string;
+  };
+
+  type HeaderObject = {
+    key?: string;
+    value?: string;
+  };
+
   type InterfaceInfo = {
     createTime?: string;
     createUserId?: string;
@@ -97,7 +170,82 @@ declare namespace API {
     url?: string;
   };
 
+  type InterfaceInfoApply = {
+    auditStatus?: string;
+    codeJson?: string;
+    createTime?: string;
+    createUserId?: string;
+    deletedFlag?: number;
+    description?: string;
+    id?: string;
+    method?: string;
+    name?: string;
+    processInstanceId?: string;
+    requestHeader?: string;
+    requestParams?: string;
+    responseHeader?: string;
+    updateTime?: string;
+    updateUserId?: string;
+    url?: string;
+  };
+
+  type InterfaceInfoApplyParam = {
+    codeJson: string;
+    createUserId?: string;
+    description: string;
+    id?: string;
+    method: string;
+    name: string;
+    requestHeader: string;
+    requestParams: string;
+    responseHeader: string;
+    updateUserId?: string;
+    url: string;
+  };
+
+  type InterfaceInfoApplyQueryParam = {
+    createUserName?: string;
+    current: number;
+    currentUserId?: string;
+    pageSize: number;
+    processInstanceIds?: string[];
+    start?: number;
+  };
+
+  type InterfaceInfoApplyRecordVO = {
+    auditResult?: string;
+    auditUserId?: string;
+    auditUserName?: string;
+    createTime?: string;
+    createUserId?: string;
+    createUserName?: string;
+    id?: string;
+    interfaceInfoApplyId?: string;
+    processNode?: string;
+    processNodeId?: string;
+    updateTime?: string;
+  };
+
+  type InterfaceInfoApplyVO = {
+    auditStatus: string;
+    createTime?: string;
+    description?: string;
+    id?: number;
+    method?: string;
+    name?: string;
+  };
+
+  type InterfaceInfoApproveParam = {
+    auditOpinion?: string;
+    auditResult?: string;
+    auditUserId?: string;
+    createUserId?: string;
+    id: string;
+    processInstanceId: string;
+  };
+
   type InterfaceInfoInvokeParam = {
+    headers?: HeaderObject[];
     id: string;
     userRequestParams?: string;
   };
@@ -112,6 +260,20 @@ declare namespace API {
     requestParams: string;
     responseHeader: string;
     status?: number;
+    updateUserId?: string;
+    url: string;
+  };
+
+  type InterfaceInfoReApplyParam = {
+    codeJson: string;
+    createUserId?: string;
+    description: string;
+    id: string;
+    method: string;
+    name: string;
+    requestHeader: string;
+    requestParams: string;
+    responseHeader: string;
     updateUserId?: string;
     url: string;
   };
@@ -134,6 +296,17 @@ declare namespace API {
     url?: string;
   };
 
+  type MyInterfaceInfoApplyQueryParam = {
+    auditStatus?: string;
+    current: number;
+    currentUserId?: string;
+    description?: string;
+    method?: string;
+    name?: string;
+    pageSize: number;
+    start?: number;
+  };
+
   type onlineInterfaceInfoUsingPUTParams = {
     /** id */
     id?: number;
@@ -149,6 +322,19 @@ declare namespace API {
     id?: number;
   };
 
+  type PageDepartmentVO = {
+    countId?: string;
+    current?: string;
+    maxLimit?: string;
+    optimizeCountSql?: boolean;
+    orders?: OrderItem[];
+    pages?: string;
+    records?: DepartmentVO[];
+    searchCount?: boolean;
+    size?: string;
+    total?: string;
+  };
+
   type PageInterfaceInfo = {
     countId?: string;
     current?: string;
@@ -160,6 +346,32 @@ declare namespace API {
     searchCount?: boolean;
     size?: string;
     total?: number;
+  };
+
+  type PageInterfaceInfoApply = {
+    countId?: string;
+    current?: string;
+    maxLimit?: string;
+    optimizeCountSql?: boolean;
+    orders?: OrderItem[];
+    pages?: string;
+    records?: InterfaceInfoApply[];
+    searchCount?: boolean;
+    size?: string;
+    total?: string;
+  };
+
+  type PageInterfaceInfoApplyVO = {
+    countId?: string;
+    current?: string;
+    maxLimit?: string;
+    optimizeCountSql?: boolean;
+    orders?: OrderItem[];
+    pages?: string;
+    records?: InterfaceInfoApplyVO[];
+    searchCount?: boolean;
+    size?: string;
+    total?: string;
   };
 
   type PageUserInfoVO = {
@@ -201,9 +413,11 @@ declare namespace API {
   type QueryInterfaceInfoParam = {
     current: number;
     description?: string;
+    method?: string;
     name?: string;
     pageSize: number;
     start?: number;
+    status?: number;
     url?: string;
   };
 

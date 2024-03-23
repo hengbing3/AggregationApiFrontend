@@ -3,11 +3,13 @@
 // API 更新时间：
 // API 唯一标识：
 import * as analysisController from './analysisController';
+import * as departmentController from './departmentController';
 import * as interfaceInfoController from './interfaceInfoController';
 import * as userController from './userController';
 import * as userInterfaceInfoController from './userInterfaceInfoController';
 export default {
   analysisController,
+  departmentController,
   interfaceInfoController,
   userController,
   userInterfaceInfoController,

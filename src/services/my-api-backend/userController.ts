@@ -32,6 +32,21 @@ export async function editUserInfoUsingPut(
   });
 }
 
+/** 修改密码 PUT /api/user/changePassword */
+export async function changePassWordUsingPut(
+  body: API.ChangePasswordParam,
+  options?: { [key: string]: any },
+) {
+  return request<API.CommonResultVoid>('/api/user/changePassword', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** 当前登录用户信息 GET /api/user/info */
 export async function getUserInfoUsingGet(options?: { [key: string]: any }) {
   return request<API.CommonResultUserInfoVO>('/api/user/info', {
