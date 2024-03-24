@@ -195,6 +195,27 @@ declare namespace API {
     url?: string;
   };
 
+  type InterfaceInfoApplyAudit = {
+    auditResult?:string;
+    auditOpinion?: string;
+    auditStatus?: string;
+    codeJson?: string;
+    createTime?: string;
+    createUserId?: string;
+    deletedFlag?: number;
+    description?: string;
+    id?: number;
+    method?: string;
+    name?: string;
+    processInstanceId?: string;
+    requestHeader?: string;
+    requestParams?: string;
+    responseHeader?: string;
+    updateTime?: string;
+    updateUserId?: string;
+    url?: string;
+  };
+
   type InterfaceInfoApplyParam = {
     codeJson: string;
     createUserId?: string;
