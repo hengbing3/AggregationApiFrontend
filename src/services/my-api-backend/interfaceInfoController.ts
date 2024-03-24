@@ -62,6 +62,21 @@ export async function deleteByIdUsingDelete(
   });
 }
 
+/** 查看接口申请详情 GET /api/interfaceInfo/apply */
+export async function queryInterfaceInfoApplyByIdUsingGet(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.queryInterfaceInfoApplyByIdUsingGETParams,
+  options?: { [key: string]: any },
+) {
+  return request<API.CommonResultInterfaceInfoApply>('/api/interfaceInfo/apply', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+
 /** applyInterfaceInfo POST /api/interfaceInfo/apply */
 export async function applyInterfaceInfoUsingPost(
   body: API.InterfaceInfoApplyParam,

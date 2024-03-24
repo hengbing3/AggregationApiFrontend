@@ -11,6 +11,12 @@ declare namespace API {
     message?: string;
   };
 
+  type CommonResultInterfaceInfoApply = {
+    code?: number;
+    data?: InterfaceInfoApply;
+    message?: string;
+  };
+
   type CommonResultListInterfaceInfoApplyRecordVO = {
     code?: number;
     data?: InterfaceInfoApplyRecordVO[];
@@ -177,7 +183,7 @@ declare namespace API {
     createUserId?: string;
     deletedFlag?: number;
     description?: string;
-    id?: string;
+    id?: number;
     method?: string;
     name?: string;
     processInstanceId?: string;
@@ -213,13 +219,14 @@ declare namespace API {
   };
 
   type InterfaceInfoApplyRecordVO = {
+    auditOpinion?: string;
     auditResult?: string;
     auditUserId?: string;
     auditUserName?: string;
     createTime?: string;
     createUserId?: string;
     createUserName?: string;
-    id?: string;
+    id?: number;
     interfaceInfoApplyId?: string;
     processNode?: string;
     processNodeId?: string;
@@ -408,6 +415,11 @@ declare namespace API {
   type queryByIdUsingGETParams = {
     /** id */
     id: string;
+  };
+
+  type queryInterfaceInfoApplyByIdUsingGETParams = {
+    /** id */
+    id: number;
   };
 
   type QueryInterfaceInfoParam = {

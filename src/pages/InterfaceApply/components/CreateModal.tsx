@@ -2,7 +2,7 @@
  * @Author: Christer hongweibin3@gmail.com
  * @Date: 2024-01-31 23:13:51
  * @LastEditors: Christer hongweibin3@gmail.com
- * @LastEditTime: 2024-03-23 22:33:58
+ * @LastEditTime: 2024-03-24 20:27:46
  * @FilePath: \my-api-frontend\src\pages\InterfaceInfo\components\CreateModal.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -39,6 +39,7 @@ const CreateModal: React.FC<Props> = (props) => {
         responseHeader: '',
         status: '',
         url: '',
+        codeJson: '',
       });
     }
   };
@@ -47,6 +48,7 @@ const CreateModal: React.FC<Props> = (props) => {
     <Modal
       visible={visible}
       footer={null}
+      width={800}
       onCancel={() => {
         onCancel?.();
         handleReset();
