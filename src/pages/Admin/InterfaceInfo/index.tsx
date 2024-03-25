@@ -2,7 +2,7 @@
  * @Author: Christer hongweibin3@gmail.com
  * @Date: 2024-01-28 17:56:26
  * @LastEditors: Christer hongweibin3@gmail.com
- * @LastEditTime: 2024-02-19 21:27:10
+ * @LastEditTime: 2024-03-24 22:46:51
  * @FilePath: \my-api-frontend\src\pages\InterfaceInfo\index.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE<
  */
@@ -348,7 +348,7 @@ const TableList: React.FC = () => {
           </Button>,
         ]}
         request={async (
-          params: U & {
+          params: any & {
             pageSize?: number;
             current?: number;
             keyword?: string;

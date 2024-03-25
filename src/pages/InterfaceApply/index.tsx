@@ -517,7 +517,7 @@ export default () => {
             type={type as 'table'}
             actionRef={actionRef}
             request={async (
-              params: U & {
+              params: any & {
                 pageSize?: number;
                 current?: number;
                 keyword?: string;
