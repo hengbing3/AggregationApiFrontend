@@ -4,12 +4,14 @@ import { PageContainer, ProTable } from '@ant-design/pro-components';
 import { Button, Tag, message } from 'antd';
 import { useState } from 'react';
 import ShowDetailModal from './components/ShowDetailModal';
+import UserEditModal from './components/UserEditModal';
 
 
 
 export default () => {
 
   const [showDetail, setShowDetail] = useState<boolean>(false);
+  const [updateModalOpen, handleUpdateModalOpen] = useState<boolean>(false);
   const [currentRow, setCurrentRow] = useState<API.UserInfoVO>();
 
   const handleShowUserInfo = async (record: any) => {
@@ -18,6 +20,33 @@ export default () => {
       if (res.code === 200) {
         setCurrentRow(res.data);
         setShowDetail(true);
+      }
+    } catch (error: any) {
+      message.error('查询失败' + error.message);
+    }
+  }
+  const formatInitialValues = (record: any) => {
+    if (record && typeof record.userAvatar === 'string') {
+      return {
+        ...record,
+        userAvatar: [
+          {
+            uid: '1111', // 注意：这里的UID只需要是唯一的，'-1'只是一个示例
+            name: 'avatar.png', // 可以是任意文件名
+            status: 'done',
+            url: record.userAvatar,
+          },
+        ],
+      };
+    }
+    return record;
+  };
+  const handleUpdateUser = async (record: any) => {
+    try {
+      const res: any = await queryUserInfoByIdUsingGet({ id: record.id });
+      if (res.code === 200) {
+        setCurrentRow(formatInitialValues(res.data));
+        handleUpdateModalOpen(true);
       }
     } catch (error: any) {
       message.error('查询失败' + error.message);
@@ -100,15 +129,15 @@ export default () => {
           查看
         </a>,
         <a
-          key="a"
+          key="b"
           onClick={() => {
-            editUser(row.id);
+            handleUpdateUser(row);
           }}
         >
           编辑
         </a>,
         <a
-        key="a"
+        key="c"
         onClick={() => {
           editUser(row.id);
         }}
@@ -172,6 +201,22 @@ export default () => {
           }}
           visible={showDetail}
           values={currentRow || {}}
+        />
+        <UserEditModal
+        initialValues={currentRow || {}}
+        visible={updateModalOpen}
+        onCancel={() => {
+          handleUpdateModalOpen(false);
+          if (!updateModalOpen) {
+            console.log("清除数据")
+            setCurrentRow(undefined);
+          }
+        }}
+        onSubmit={async (values: any) => {
+          handleUpdateUserInfo(values);
+          handleUpdateModalOpen(false);
+          setCurrentRow(undefined);
+        }}
         />
     </PageContainer>
   );
