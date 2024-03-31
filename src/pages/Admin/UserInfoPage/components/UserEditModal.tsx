@@ -10,12 +10,13 @@ export type Props = {
   onSubmit: (values: API.UserInfoVO) => Promise<void>;
   // 模态框是否可见
   visible: boolean;
+  isAddNew?: boolean;
 };
 
 const UserEditModal: React.FC<Props> = (props) => {
-  const { initialValues, visible, onCancel, onSubmit } = props;
+  const { initialValues, visible,isAddNew, onCancel, onSubmit } = props;
   // 假设这是上传头像的API地址
-  const uploadAvatarApi = '/api/upload';
+  const uploadAvatarApi = 'http://localhost:8101/api/files/upload';
   // 创建表单引用
   const formRef = useRef<ProFormInstance>();
 
@@ -37,12 +38,6 @@ const UserEditModal: React.FC<Props> = (props) => {
     formRef.current?.setFieldsValue({
       userName: '',
       userAvatar: [
-        {
-          uid: '1111', // 注意：这里的UID只需要是唯一的，'-1'只是一个示例
-          name: 'avatar.png', // 可以是任意文件名
-          status: 'done',
-          url: '',
-        },
       ],
       userProfile: '',
       userRole: '',
@@ -68,6 +63,30 @@ const UserEditModal: React.FC<Props> = (props) => {
         name="userName"
         label="用户昵称"
         rules={[{ required: true, message: '请输入用户昵称!' }]}
+      />
+      <ProFormText
+        name="userAccount"
+        label="账号"
+        rules={[{ required: true, message: '请输入账号!' }]}
+        hidden={!isAddNew}
+      />
+      <ProFormText
+        name="userPassword"
+        label="密码"
+        rules={[{ required: true, message: '请输入密码!' }]}
+        hidden={!isAddNew}
+        fieldProps={{
+          type: 'password',
+        }}
+      />
+      <ProFormText
+        name="checkPassword"
+        label="确认密码"
+        rules={[{ required: true, message: '请输入确认密码!' }]}
+        hidden={!isAddNew}
+        fieldProps={{
+          type: 'password',
+        }}
       />
       <ProFormUploadButton
         name="userAvatar"

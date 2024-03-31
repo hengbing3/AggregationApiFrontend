@@ -32,6 +32,18 @@ export async function editUserInfoUsingPut(
   });
 }
 
+/** 新增用户 POST /api/user/add */
+export async function addUserUsingPost(body: API.UserAddParam, options?: { [key: string]: any }) {
+  return request<API.CommonResultVoid>('/api/user/add', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** 修改密码 PUT /api/user/changePassword */
 export async function changePassWordUsingPut(
   body: API.ChangePasswordParam,

@@ -1,8 +1,8 @@
-import { queryUserByConditionUsingPost, queryUserInfoByIdUsingGet } from '@/services/my-api-backend/userController';
-import type { ProColumns } from '@ant-design/pro-components';
+import { addUserUsingPost, queryUserByConditionUsingPost, queryUserInfoByIdUsingGet } from '@/services/my-api-backend/userController';
+import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { PageContainer, ProTable } from '@ant-design/pro-components';
 import { Button, Tag, message } from 'antd';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import ShowDetailModal from './components/ShowDetailModal';
 import UserEditModal from './components/UserEditModal';
 
@@ -11,8 +11,10 @@ import UserEditModal from './components/UserEditModal';
 export default () => {
 
   const [showDetail, setShowDetail] = useState<boolean>(false);
+  const [isAdd, setIsAddNew] = useState<boolean>(false);
   const [updateModalOpen, handleUpdateModalOpen] = useState<boolean>(false);
   const [currentRow, setCurrentRow] = useState<API.UserInfoVO>();
+  const actionRef = useRef<ActionType>();
 
   const handleShowUserInfo = async (record: any) => {
     try {
@@ -31,7 +33,7 @@ export default () => {
         ...record,
         userAvatar: [
           {
-            uid: '1111', // 注意：这里的UID只需要是唯一的，'-1'只是一个示例
+            uid: '', // 注意：这里的UID只需要是唯一的，'-1'只是一个示例
             name: 'avatar.png', // 可以是任意文件名
             status: 'done',
             url: record.userAvatar,
@@ -47,9 +49,27 @@ export default () => {
       if (res.code === 200) {
         setCurrentRow(formatInitialValues(res.data));
         handleUpdateModalOpen(true);
+        setIsAddNew(false)
       }
     } catch (error: any) {
       message.error('查询失败' + error.message);
+    }
+  }
+  const hadleAddUserInfo = async (values: any) => {
+    try {
+       const avatarUrl = values.userAvatar[0].response.data[0];
+       console.log("照片", avatarUrl);
+      const res: any = await addUserUsingPost({
+        ...values,
+        userAvatar: avatarUrl,
+      });
+      if (res.code === 200) {
+        message.success('新增成功');
+        handleUpdateModalOpen(false);
+        actionRef.current?.reload();
+      }
+    } catch (error: any) {
+      message.error('新增失败' + error.message);
     }
   }
 
@@ -155,6 +175,7 @@ export default () => {
     <PageContainer>
     <ProTable<API.UserInfoVO>
         columns={columns}
+        actionRef={actionRef}
         request={async (
           params: any & {
             pageSize?: number;
@@ -181,7 +202,11 @@ export default () => {
         }}
         rowKey="key"
         toolBarRender={() => [
-          <Button key="primary" type="primary">
+          <Button key="primary" type="primary" onClick={() => {
+            handleUpdateModalOpen(true)
+            setCurrentRow(undefined);
+            setIsAddNew(true);
+          }}>
             新增用户
           </Button>,
         ]}
@@ -203,6 +228,7 @@ export default () => {
           values={currentRow || {}}
         />
         <UserEditModal
+        isAddNew={isAdd}
         initialValues={currentRow || {}}
         visible={updateModalOpen}
         onCancel={() => {
@@ -213,9 +239,15 @@ export default () => {
           }
         }}
         onSubmit={async (values: any) => {
-          handleUpdateUserInfo(values);
-          handleUpdateModalOpen(false);
-          setCurrentRow(undefined);
+          if (isAdd) {
+            hadleAddUserInfo(values);
+            setCurrentRow(undefined);
+          } else {
+            handleUpdateUserInfo(values);
+            handleUpdateModalOpen(false);
+            setCurrentRow(undefined);
+          }
+
         }}
         />
     </PageContainer>

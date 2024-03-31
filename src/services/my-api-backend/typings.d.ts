@@ -29,6 +29,12 @@ declare namespace API {
     message?: string;
   };
 
+  type CommonResultListstring = {
+    code?: number;
+    data?: string[];
+    message?: string;
+  };
+
   type CommonResultListUserInterfaceInfo = {
     code?: number;
     data?: UserInterfaceInfo[];
@@ -204,7 +210,7 @@ declare namespace API {
     createUserId?: string;
     deletedFlag?: number;
     description?: string;
-    id?: number;
+id?: number;
     method?: string;
     name?: string;
     processInstanceId?: string;
@@ -479,6 +485,18 @@ declare namespace API {
     userId?: string;
   };
 
+  type UserAddParam = {
+    checkPassword: string;
+    departmentId: number;
+    id?: number;
+    userAccount: string;
+    userAvatar: string;
+    userName: string;
+    userPassword: string;
+    userProfile?: string;
+    userRole: string;
+  };
+
   type UserInfoVO = {
     id?: string;
     token?: string;
@@ -530,6 +548,7 @@ declare namespace API {
     pageSize: number;
     start?: number;
     unionId?: string;
+    userAccount?: string;
     userName?: string;
     userProfile?: string;
     userRole?: string;
@@ -548,9 +567,11 @@ declare namespace API {
   };
 
   type UserUpdateParam = {
+    departmentId?: number;
     id?: string;
     userAvatar?: string;
     userName: string;
     userProfile?: string;
+    userRole?: string;
   };
 }
