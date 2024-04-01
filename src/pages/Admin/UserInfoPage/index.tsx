@@ -1,4 +1,4 @@
-import { addUserUsingPost, queryUserByConditionUsingPost, queryUserInfoByIdUsingGet } from '@/services/my-api-backend/userController';
+import { addUserUsingPost, editUserInfoUsingPut, queryUserByConditionUsingPost, queryUserInfoByIdUsingGet } from '@/services/my-api-backend/userController';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { PageContainer, ProTable } from '@ant-design/pro-components';
 import { Button, Tag, message } from 'antd';
@@ -70,6 +70,25 @@ export default () => {
       }
     } catch (error: any) {
       message.error('新增失败' + error.message);
+    }
+  }
+
+  const handleUpdateUserInfo = async (values: any) => {
+    try {
+      const avatarUrl = values.userAvatar[0].url ? null : values.userAvatar[0].response.data[0];
+      console.log('解析后的头像', avatarUrl)
+      const res: any = await editUserInfoUsingPut({
+        ...values,
+        id: currentRow?.id,
+        userAvatar: avatarUrl,
+      });
+      if(res.code === 200) {
+        message.success('编辑成功');
+        handleUpdateModalOpen(false);
+        actionRef.current?.reload();
+      }
+    } catch (error: any) {
+      message.error('编辑失败' + error.message);
     }
   }
 
@@ -244,7 +263,6 @@ export default () => {
             setCurrentRow(undefined);
           } else {
             handleUpdateUserInfo(values);
-            handleUpdateModalOpen(false);
             setCurrentRow(undefined);
           }
 

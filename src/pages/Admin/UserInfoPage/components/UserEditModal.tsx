@@ -48,7 +48,7 @@ const UserEditModal: React.FC<Props> = (props) => {
 
   return (
     <ModalForm
-      title="编辑用户信息"
+      title={isAddNew ? "新增用户" : "编辑用户信息"}
       formRef={formRef}
       open={visible}
       initialValues={initialValues}
@@ -67,13 +67,13 @@ const UserEditModal: React.FC<Props> = (props) => {
       <ProFormText
         name="userAccount"
         label="账号"
-        rules={[{ required: true, message: '请输入账号!' }]}
+        rules={!isAddNew ? [] : [{ required: true, message: '请输入账号!' }]}
         hidden={!isAddNew}
       />
       <ProFormText
         name="userPassword"
         label="密码"
-        rules={[{ required: true, message: '请输入密码!' }]}
+        rules={!isAddNew ? [] : [{ required: true, message: '请输入密码!' }]}
         hidden={!isAddNew}
         fieldProps={{
           type: 'password',
@@ -82,7 +82,7 @@ const UserEditModal: React.FC<Props> = (props) => {
       <ProFormText
         name="checkPassword"
         label="确认密码"
-        rules={[{ required: true, message: '请输入确认密码!' }]}
+        rules={!isAddNew ? [] : [{ required: true, message: '请输入确认密码' }]}
         hidden={!isAddNew}
         fieldProps={{
           type: 'password',

@@ -568,7 +568,7 @@ id?: number;
 
   type UserUpdateParam = {
     departmentId?: number;
-    id?: string;
+    id: number;
     userAvatar?: string;
     userName: string;
     userProfile?: string;
