@@ -119,3 +119,18 @@ export async function registerUserUsingPost(
     ...(options || {}),
   });
 }
+
+/** 重置密码 PUT /api/user/resetPassword */
+export async function resetPasswordUsingPut(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.resetPasswordUsingPUTParams,
+  options?: { [key: string]: any },
+) {
+  return request<API.CommonResultVoid>('/api/user/resetPassword', {
+    method: 'PUT',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}

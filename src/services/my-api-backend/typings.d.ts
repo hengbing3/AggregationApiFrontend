@@ -485,6 +485,11 @@ id?: number;
     userId?: string;
   };
 
+  type resetPasswordUsingPUTParams = {
+    /** id */
+    id: number;
+  };
+
   type UserAddParam = {
     checkPassword: string;
     departmentId: number;
@@ -498,6 +503,7 @@ id?: number;
   };
 
   type UserInfoVO = {
+    departmentId?: number;
     id?: string;
     token?: string;
     userAccount?: string;

@@ -10,11 +10,12 @@ export type Props = {
   onSubmit: (values: API.UserInfoVO) => Promise<void>;
   // 模态框是否可见
   visible: boolean;
+  isLoading: boolean;
   isAddNew?: boolean;
 };
 
 const UserEditModal: React.FC<Props> = (props) => {
-  const { initialValues, visible,isAddNew, onCancel, onSubmit } = props;
+  const { initialValues, visible,isAddNew,isLoading, onCancel, onSubmit } = props;
   // 假设这是上传头像的API地址
   const uploadAvatarApi = 'http://localhost:8101/api/files/upload';
   // 创建表单引用
@@ -48,6 +49,7 @@ const UserEditModal: React.FC<Props> = (props) => {
 
   return (
     <ModalForm
+      loading={isLoading}
       title={isAddNew ? "新增用户" : "编辑用户信息"}
       formRef={formRef}
       open={visible}
