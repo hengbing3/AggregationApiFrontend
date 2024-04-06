@@ -2,12 +2,13 @@
  * @Author: Christer hongweibin3@gmail.com
  * @Date: 2024-01-21 15:07:32
  * @LastEditors: Christer hongweibin3@gmail.com
- * @LastEditTime: 2024-03-25 21:32:16
+ * @LastEditTime: 2024-04-06 10:07:47
  * @FilePath: \AggregationApiFrontend\config\routes.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 export default [
   { name: '主页', path: '/', icon: 'smile', component: './Index' },
+  { name: '个人中心', path: '/my_info', icon: 'user', component: './MyInfo' },
   { name: '接口申请', path: '/interface_apply', icon: 'dashboard', component: './InterfaceApply' },
   {
     path: '/interface_info/:id',

@@ -1,7 +1,8 @@
 declare namespace API {
   type ChangePasswordParam = {
     confirmPassword: string;
-    id: string;
+    id: number;
+    isRestPassword?: boolean;
     userPassword: string;
   };
 
@@ -92,6 +93,12 @@ declare namespace API {
   type CommonResultstring = {
     code?: number;
     data?: string;
+    message?: string;
+  };
+
+  type CommonResultUserCertificateVO = {
+    code?: number;
+    data?: UserCertificateVO;
     message?: string;
   };
 
@@ -341,6 +348,13 @@ id?: number;
     start?: number;
   };
 
+  type MyUserUpdateParam = {
+    id?: number;
+    userAvatar?: string;
+    userName: string;
+    userProfile?: string;
+  };
+
   type onlineInterfaceInfoUsingPUTParams = {
     /** id */
     id?: number;
@@ -462,7 +476,7 @@ id?: number;
 
   type queryUserInfoByIdUsingGETParams = {
     /** id */
-    id: string;
+    id: number;
   };
 
   type QueryUserInterfaceInfoListParam = {
@@ -502,9 +516,14 @@ id?: number;
     userRole: string;
   };
 
+  type UserCertificateVO = {
+    accessKey?: string;
+    secretKey?: string;
+  };
+
   type UserInfoVO = {
     departmentId?: number;
-    id?: string;
+    id?: number;
     token?: string;
     userAccount?: string;
     userAvatar?: string;
