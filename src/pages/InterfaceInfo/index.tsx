@@ -2,7 +2,7 @@
  * @Author: Christer hongweibin3@gmail.com
  * @Date: 2024-02-07 23:07:58
  * @LastEditors: Christer hongweibin3@gmail.com
- * @LastEditTime: 2024-02-25 16:24:20
+ * @LastEditTime: 2024-04-25 23:16:36
  * @FilePath: \my-api-frontend\src\pages\InterfaceInfo\index.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -64,6 +64,7 @@ const Index: React.FC = () => {
         id: params.id,
         ...values,
       });
+      console.log('res', res)
       if (res.code === 200) {
         setInvokeRes(res.data);
         message.success('接口请求成功');
@@ -83,6 +84,15 @@ const Index: React.FC = () => {
     setActiveTabKey(key);
   };
   const [stateValue, setStateValue] = useState({});
+  const style = {
+    backgroundColor: '#f6f8fa',
+    border: '1px solid #d9d9d9',
+    borderRadius: '4px',
+    padding: '16px',
+    overflow: 'auto',
+    fontFamily: 'monospace',
+  };
+
   return (
     <PageContainer title="查看接口文档">
       <ProCard>
@@ -130,7 +140,7 @@ const Index: React.FC = () => {
       </ProCard>
       <Divider />
       <Card title="返回结果" loading={invokeLoading}>
-        {invokeRes}
+          <pre style={style}><code>{JSON.stringify(invokeRes, null, 2)}</code></pre>
       </Card>
     </PageContainer>
   );
